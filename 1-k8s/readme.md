@@ -75,9 +75,15 @@ Kubevt create -f ngixn-pod.yaml
 Kubevt create -f ngixn-svc.yaml
 
 ```
-等待1分钟左右，执行 `kubectl get pods --all-namcpaces`,显示 nginx 启动状态为running,说明pod已经启动成功，执行 `kubectl get svc --all-namcpaces` 或者 service，可以得到端口映射状态。
+等待1分钟左右，执行 `kubectl get pods `,显示 nginx 启动状态为running,说明pod已经启动成功，
 
-此时访问每台 node 的 80 端口都会访问到 nginx 的 web 初始界面，这说明集群启动成功，运行其他应用也如此，前提是 pod 和 svc 配置文件要配的正确，后期会深入学习如何配置 namespace 和 Deployment 文件。
+![1.jpg](images/2.png)
+
+执行 `kubectl get svc --all-namcpaces` 或者 service，可以得到端口映射状态。
+
+![1.jpg](images/3.png)
+
+此时访问每台 node 的 30008 端口都会访问到 nginx 的 web 初始界面，这说明集群启动成功，运行其他应用也如此，前提是 pod 和 svc 配置文件要配的正确，后期会深入学习如何配置 namespace 和 Deployment 文件。
 
 **关闭服务：** 按顺序依次执行
 
