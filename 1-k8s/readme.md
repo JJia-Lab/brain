@@ -1,5 +1,6 @@
+![](images/main.jpg)
 # 十分钟入门 k8s
----
+
 > 近年Docker可谓是火的不能再火了，但是Docker虽然好用，即便是后期出了Docker伴侣Docker-compose，但面对强大的集群，成千上万的容器,运维工程师纵然是千手观音，也管理不了这么多应用，这个时候K8s雪中送炭来了，接替了绝大部分的运维管理工作，解放了双手。
 > 本文编写的目的在于帮助那些还没有开始使用 k8s 的 docker 使用者或者即将使用 docker 的同学快速了解并入门 k8s。
 
@@ -75,15 +76,9 @@ Kubevt create -f ngixn-pod.yaml
 Kubevt create -f ngixn-svc.yaml
 
 ```
-等待1分钟左右，执行 `kubectl get pods `,显示 nginx 启动状态为running,说明pod已经启动成功，
+等待1分钟左右，执行 `kubectl get pods --all-namcpaces`,显示 nginx 启动状态为running,说明pod已经启动成功，执行 `kubectl get svc --all-namcpaces` 或者 service，可以得到端口映射状态。
 
-![1.jpg](images/2.png)
-
-执行 `kubectl get svc `，可以得到端口映射状态。
-
-![1.jpg](images/3.png)
-
-此时访问每台 node 的 30008 端口都会访问到 nginx 的 web 初始界面，这说明集群启动成功，运行其他应用也如此，前提是 pod 和 svc 配置文件要配的正确，后期会深入学习如何配置 namespace 和 Deployment 文件。
+此时访问每台 node 的 80 端口都会访问到 nginx 的 web 初始界面，这说明集群启动成功，运行其他应用也如此，前提是 pod 和 svc 配置文件要配的正确，后期会深入学习如何配置 namespace 和 Deployment 文件。
 
 **关闭服务：** 按顺序依次执行
 
@@ -91,8 +86,6 @@ Kubevt create -f ngixn-svc.yaml
 Kubevt delete -f ngixn-svc.yaml
 Kubevt delete -f ngixn-pod.yaml
 ```
-
-**安装 dashboard** 完成集群可视化
 
 ## 三、总结
 
