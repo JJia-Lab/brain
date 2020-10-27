@@ -79,7 +79,7 @@ Kubevt create -f ngixn-svc.yaml
 
 ![1.jpg](images/2.png)
 
-执行 `kubectl get svc --all-namcpaces` 或者 service，可以得到端口映射状态。
+执行 `kubectl get svc `，可以得到端口映射状态。
 
 ![1.jpg](images/3.png)
 
