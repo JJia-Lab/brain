@@ -9,7 +9,7 @@ K8s 全称 kubernets，希腊语意为：舵手，是一种可自动实施 Linux
 
 要学习使用K8s，首先要了解K8s的架构、组件以及特点，说到集群，我们不免会想到master、slaver 或者 node，k8s集群也是这样，由多台 master 和 node 组成，由 master 控制 node，由node（也可以是master）提供服务，如图一所示：
 
-图
+![1.jpg](images/1.jpg)
 
 **什么是 master：**
 master 的组件包括 apiserver、controller-manager、scheduler 和 etcd，那么这几个组件是用来做什么的呢？我做了个简单的比喻： 
@@ -36,6 +36,7 @@ master 的组件包括 apiserver、controller-manager、scheduler 和 etcd，那
 *  首先我们启动 6 个docker容器，3个master以及3个node。
 * 所有机器关闭swap、关闭防火墙和SELinux
 * 三台 master 安装好 keepalived 和haproxy，并做好相应配置（例如虚拟 ip 为172.153.100.100）
+
 **2.安装k8s：**
 * 以 Centos 为例，
 2.1 替换 k8s 安装源
@@ -58,8 +59,37 @@ sudo chown root:root /etc/yum.repos.d/kubernetes.repo
 ```sh
 sudo yum update -y
 ```
+
 **3.使用**
+我们以用 k8s 管理 nginx 服务器为例：
+
+首先在三台maste主机上相应目录**创建以下两个文件**
+```sh
+touch  nginx-pod.yaml nginx-svc.yaml
+```
+nginx-pod.yaml、nginx-svc.yaml 具体内容参看 repo 代码，公众号用户点击查看原文。
+
+**启动服务：** 在配置文件路径下启动nginx请按照如下命令依次执行： 
+```sh
+Kubevt create -f ngixn-pod.yaml
+Kubevt create -f ngixn-svc.yaml
+
+```
+等待1分钟左右，执行 `kubectl get pods --all-namcpaces`,显示 nginx 启动状态为running,说明pod已经启动成功，执行 `kubectl get svc --all-namcpaces` 或者 service，可以得到端口映射状态。
+
+此时访问每台 node 的 80 端口都会访问到 nginx 的 web 初始界面，这说明集群启动成功，运行其他应用也如此，前提是 pod 和 svc 配置文件要配的正确，后期会深入学习如何配置 namespace 和 Deployment 文件。
+
+**关闭服务：** 按顺序依次执行
+
+```sh
+Kubevt delete -f ngixn-svc.yaml
+Kubevt delete -f ngixn-pod.yaml
+```
+
+**安装 dashboard** 完成集群可视化
 
 ## 三、总结
-k8s 从了解到部署使用，10分钟基本入门，以后通过多学、多练，多入坑、多填坑，会逐渐熟练起来。本文粗略浅述，不够详尽，一些附加组件和网络结构等在本文中也没有叙述，仅旨在帮助学习者入门，学习者后期可通过K8s官网来学习K8s更全面的知识，从而更好的运用K8s。
+
+以上8点即K8s集群的简单部署。本集群的工作原理是，所有的节点均可以通过haproxy对外提供服务，所有的服务由一个master控制，当主master宕机或者出现服务异常的时候，会通过keepalived将控制权转移到下一个权重的mster,其他的节点不至于出现群龙无首的局面。初始化mster过程为部署重点，初始过程有可能加载需要时间或者超时，需要重点关注。同时要注意的是，官方的指导文档是将etcd独立安装，比较繁琐，本文把etcd封装于镜像之中，目前阿里云提供的K8s，也是将Etcd当做组件做成了镜像，您部署的时候也可以采用官方的教程，部署方法各有千秋，稳定、方便是首选。
+
 
