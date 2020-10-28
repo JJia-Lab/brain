@@ -17,8 +17,8 @@ K8s 全称 kubernets，希腊语意为：舵手，是一种可自动实施 Linux
 **什么是 master：**
 master 的组件包括 apiserver、controller-manager、scheduler 和 etcd，那么这几个组件是用来做什么的呢？我做了个简单的比喻： 
 图
-* **Apiserver（房子入口）:** K8S对外的唯一接口，提供HTTP/HTTPS RESTful API，即所有的请求都需要经过这个接口进行通信
-* **Etcd （后勤人员）：** 负责保存k8s 集群的配置信息和各种资源的状态信息，当数据发生变化时，etcd会快速地通知k8s相关组件 
+* **Apiserver（房子入口）:** K8S 对外的唯一接口，提供 HTTP/HTTPS RESTful API，即所有的请求都需要经过这个接口进行通信
+* **Etcd （后勤人员）：** 负责保存 k8s 集群的配置信息和各种资源的状态信息，当数据发生变化时，etcd会快速地通知k8s相关组件 
 * **Controller Manager（管理者）：** 负责管理集群各种资源，保证资源处于预期的状态
 * **Schedule （负责调度）：** 资源调度，负责决定将 Pod 放到哪个 Node 上运行
  
@@ -28,7 +28,7 @@ master 的组件包括 apiserver、controller-manager、scheduler 和 etcd，那
 * **Kubelet（来料加工生产）：** kubelet 是 node 的 agent，kubelet 会根据 pod 信息创建和运行容器，并向master报告运行状态
 * **Container Runtime （下载运行）：** 每个Node都需要提供一个容器运行（Container Runtime）环境，它负责下载镜像并运行容器。
 
-* **Kube-proxy（传输纽带）：** 用户通过service（即将介绍）访问Pod，每个Node都会运行kube-proxy服务，将访问的service的TCP/UDP数据流转发到后端的容器
+* **Kube-proxy（传输纽带）：** 用户通过 service（即将介绍）访问Pod，每个Node都会运行kube-proxy服务，将访问的service的TCP/UDP数据流转发到后端的容器
 
 如此，我们也形象地了解了 node 和 node 组件的作用，与此同时，文中提到了 pod 和 service，那么这两个英文单词在K8S中表示什么呢？
 **Pod 资源对象**是一种集合了一个或多个应用容器、存储资源、专用ip、以及支撑运行的其他选项的逻辑组件，用大白话讲，pod好比一场舞台剧，是导演、编剧编排好以后由演员、灯光、道具、场务等协作完成的一场戏。
@@ -36,9 +36,9 @@ master 的组件包括 apiserver、controller-manager、scheduler 和 etcd，那
 
 ## 二、快速开始 k8s
 **1.准备：**
-*  首先我们启动 6 个docker容器，3个master以及3个node。
-* 所有机器关闭swap、关闭防火墙和SELinux
-* 三台 master 安装好 keepalived 和haproxy，并做好相应配置（例如虚拟 ip 为192.168.99.100）
+*  首先我们启动 6 个虚拟机，3 个 master 以及 3 个 node。
+* 所有机器关闭 swap、关闭防火墙和 SELinux
+* 三台 master 安装好 keepalived 和 haproxy，并做好相应配置（例如虚拟 ip 为192.168.99.100）
 
 **2.安装k8s：**
 以 Centos 为例
@@ -68,11 +68,11 @@ sudo yum install kubectl kubeadm kubelet -y
 ```
 然后静待完成安装。
 
-配置Keepalived和haproxy，请见官方配置。
+配置 Keepalived 和 haproxy，请见官方配置。
 
-初始化master，镜像已经挪到了阿里云镜像仓库，便于拉取。
+初始化 master，镜像已经挪到了阿里云镜像仓库，便于拉取。
 
-在master1上执行:
+在 master1 上执行:
 ```sh
 kubeadm init 
 --kubernetes-version=v1.19.1 
@@ -82,15 +82,15 @@ kubeadm init
 --token-ttl=0 
 --upload-certs | tee ~/kubeadm.init.log
 ```
-注意: 192.168.99.100 是由keepalived生成的虚拟IP。
-如果看到诸如以下的输出，则说明第一个master节点正常启动了。
+注意: 192.168.99.100 是由 keepalived 生成的虚拟 IP。
+如果看到诸如以下的输出，则说明第一个 master 节点正常启动了。
 Your Kubernetes control-plane has initialized successfully!
 
-安装网络add-on，这里使用的是weave
+安装网络 add-on，这里使用的是 weave
 ```sh
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
-master2和master3应当加入集群。
+master2 和 master3 应当加入集群。
 ```sh
 kubeadm join 192.168.99.100:6443 --token abcdef.0123456789abcdef 
 --discovery-token-ca-cert-hash sha256:9a336bc2dfad45db42521e1f2d55f129f9adb5ffa24187b6710d778f88abaeba 
@@ -104,7 +104,9 @@ kubeadm join 192.168.99.100:6443 --token abcdef.0123456789abcdef
 确认安装结果
 ```sh
 kubectl get nodes
-```
+
+#output 
+
 NAME    STATUS   ROLES    AGE   VERSION   INTERNAL-IP      
 mster1    Ready    master   18h    v1.19.1   192.168.99.201   
 node1     Ready    <none>   17h    v1.19.1   192.168.99.202  
@@ -112,7 +114,7 @@ node3     Ready    <none>   18h    v1.19.1   192.168.99.203
 mster3    Ready    master   18h    v1.19.1   192.168.99.204   
 node2     Ready    <none>   17h    v1.19.1   192.168.99.205  
 mster2    Ready    master   18h    v1.19.1   192.168.99.206  
-
+```
 **3.使用**
 
 我们以用 k8s 管理 nginx 服务器为例：
