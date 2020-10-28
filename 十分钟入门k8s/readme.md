@@ -38,7 +38,7 @@ master 的组件包括 apiserver、controller-manager、scheduler 和 etcd，那
 **1.准备：**
 *  首先我们启动 6 个docker容器，3个master以及3个node。
 * 所有机器关闭swap、关闭防火墙和SELinux
-* 三台 master 安装好 keepalived 和haproxy，并做好相应配置（例如虚拟 ip 为172.153.100.100）
+* 三台 master 安装好 keepalived 和haproxy，并做好相应配置（例如虚拟 ip 为192.168.99.100）
 
 **2.安装k8s：**
 以 Centos 为例
@@ -62,6 +62,56 @@ sudo chown root:root /etc/yum.repos.d/kubernetes.repo
 ```sh
 sudo yum update -y
 ```
+安装K8s
+```sh
+sudo yum install kubectl kubeadm kubelet -y
+```
+然后静待完成安装。
+
+配置Keepalived和haproxy，请见官方配置。
+
+初始化master，镜像已经挪到了阿里云镜像仓库，便于拉取。
+
+在master1上执行:
+```sh
+kubeadm init 
+--kubernetes-version=v1.19.1 
+--control-plane-endpoint=192.168.99.100:6443 
+--image-repository=registry.cn-shanghai.aliyuncs.com/liudawei 
+--token=abcdef.0123456789abcdef 
+--token-ttl=0 
+--upload-certs | tee ~/kubeadm.init.log
+```
+注意: 192.168.99.100 是由keepalived生成的虚拟IP。
+如果看到诸如以下的输出，则说明第一个master节点正常启动了。
+Your Kubernetes control-plane has initialized successfully!
+
+安装网络add-on，这里使用的是weave
+```sh
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+master2和master3应当加入集群。
+```sh
+kubeadm join 192.168.99.100:6443 --token abcdef.0123456789abcdef 
+--discovery-token-ca-cert-hash sha256:9a336bc2dfad45db42521e1f2d55f129f9adb5ffa24187b6710d778f88abaeba 
+--control-plane --certificate-key 13891781cdf0cb2bbe2515b6b3fbd2119eb9efee8ebdd1faf9caeff55d1533ed
+```
+节点加入集群
+```sh
+kubeadm join 192.168.99.100:6443 --token abcdef.0123456789abcdef 
+--discovery-token-ca-cert-hash sha256:9a336bc2dfad45db42521e1f2d55f129f9adb5ffa24187b6710d778f88abaeba
+```
+确认安装结果
+```sh
+kubectl get nodes
+```
+NAME    STATUS   ROLES    AGE   VERSION   INTERNAL-IP      
+mster1    Ready    master   18h    v1.19.1   192.168.99.201   
+node1     Ready    <none>   17h    v1.19.1   192.168.99.202  
+node3     Ready    <none>   18h    v1.19.1   192.168.99.203    
+mster3    Ready    master   18h    v1.19.1   192.168.99.204   
+node2     Ready    <none>   17h    v1.19.1   192.168.99.205  
+mster2    Ready    master   18h    v1.19.1   192.168.99.206  
 
 **3.使用**
 
