@@ -1,8 +1,8 @@
 # 一文读懂 Spring AOP 实现原理
 
 
-> 说起大名鼎鼎的Spring框架，大家都知道spring有两大核心概念，一个是Spring IOC，另一个就是Spring
-> AOP，本文目的在于让大家了解到Spring AOP的实现原理，我会通过源码的分析来让大家看到Spring是怎么实现的AOP。
+> 说起大名鼎鼎的 Spring 框架，大家都知道 Spring 有两大核心概念，一个是 Spring IOC，另一个就是 Spring
+> AOP，本文目的在于让大家了解到 Spring AOP 的实现原理，我会通过源码的分析来让大家看到 Spring 是怎么实现的 AOP。
 
 ## **一、什么是AOP**
 
@@ -107,7 +107,7 @@ public class TestAspect {
 }
 ```
 
-​	执行测试方法之后，可以看到控制台上在打印 query 方法中的query...之前，打印了before------------
+​	执行测试方法之后，可以看到控制台上在打印 query 方法中的 query...之前，打印了 before------------
 
 [![BD5o34.png](https://s1.ax1x.com/2020/11/02/BD5o34.png)](https://imgchr.com/i/BD5o34)
 
