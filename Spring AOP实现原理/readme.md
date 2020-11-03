@@ -1,4 +1,4 @@
-# Spring AOP实现原理
+# 一文读懂 Spring AOP 实现原理
 
 
 > 说起大名鼎鼎的Spring框架，大家都知道spring有两大核心概念，一个是Spring IOC，另一个就是Spring
@@ -6,22 +6,22 @@
 
 ## **一、什么是AOP**
 
-​	AOP(Aspect-OrientedProgramming)意思是面向切面编程，可以说是OOP(Object-Oriented Programming)面向对象编程的补充和完善，相较于OOP的继承，多态和封装的概念，AOP更多关注的是业务中分散的功能点，举个例子，系统中记录操作日志的功能，分散在各个不同的模块中，操作日志的记录和主要业务部分本身关联不大，但是用OOP实现，就不得抽象出一个记录操作记录的接口，然后各个模块实现它，而使用AOP，将记录操作日志的动作抽象成一个切面，再通过面向切面编程，那么就可以不用编写很多的重复代码。
+​	AOP(Aspect-OrientedProgramming)  意思是面向切面编程，可以说是 OOP(Object-Oriented Programming)  面向对象编程的补充和完善，相较于 OOP 的继承，多态和封装的概念，AOP 更多关注的是业务中分散的功能点，举个例子，系统中记录操作日志的功能，分散在各个不同的模块中，操作日志的记录和主要业务部分本身关联不大，但是用 OOP 实现，就不得抽象出一个记录操作记录的接口，然后各个模块实现它，而使用 AOP，将记录操作日志的动作抽象成一个切面，再通过面向切面编程，那么就可以不用编写很多的重复代码。
 
 ## 二、AOP的相关概念
 
-- Aspect（切面）：Aspect 声明类似于 Java 中的类声明，在 Aspect 中会包含着一些 Pointcut 以及相应的 Advice
-- PointCut（切点）：表示一组 `join point`，这些 join point 或是通过逻辑关系组合起来，或是通过通配、正则表达式等方式集中起来，它定义了相应的 Advice 将要发生的地方
+- Aspect（切面）：Aspect  声明类似于 Java 中的类声明，在 Aspect 中会包含着一些 Pointcut 以及相应的 Advice
+- PointCut（切点）：表示一组 join point，这些 join point 或是通过逻辑关系组合起来，或是通过通配、正则表达式等方式集中起来，它定义了相应的 Advice 将要发生的地方
 - Join Point（连接点）：表示在程序中明确定义的点，典型的包括方法调用，对类成员的访问以及异常处理程序块的执行等等，同时自身还可以嵌套其他的连接点
-- Advice（增强）：又叫通知，Advice 定义了在 `Pointcut` 里面定义的程序点具体要做的操作，它通过 before、after 和 around 来区别是在每个 join point 之前、之后还是代替执行的代码
-- Target（目标对象）：织入Advice的目标对象
-- Weaving（织入）：将 `Aspect` 和其他对象连接起来, 并创建 `Adviced` object 的过程
+- Advice（增强）：又叫通知，Advice 定义了在 Pointcut 里面定义的程序点具体要做的操作，它通过 before、after 和 around 来区别是在每个 join point 之前、之后还是代替执行的代码
+- Target（目标对象）：织入 Advice 的目标对象
+- Weaving（织入）：将 Aspect 和其他对象连接起来, 并创建 Adviced object 的过程
 
 [![BDhsIS.png](https://s1.ax1x.com/2020/11/02/BDhsIS.png)](https://imgchr.com/i/BDhsIS)
 
 ## 三、Spring AOP的使用
 
-​	了解了AOP的相关概念之后，现在我们开始使用Spring的AOP，话不多说，直接上代码。首先创建一个maven工程，引入Spring-context依赖，版本为5.1.1RELEASE
+​	了解了 AOP 的相关概念之后，现在我们开始使用 Spring 的 AOP，话不多说，直接上代码。首先创建一个 maven 工程，引入 Spring-context 依赖，版本为5.1.1RELEASE
 
 ```xml
 <dependency>
@@ -41,7 +41,7 @@
 </dependency>
 ```
 
-​	接下来，我全程都使用注解的形式来使用Spring AOP，首先我创建一个配置类，开启aspectj的自动代理支持
+​	接下来，我全程都使用注解的形式来使用 Spring AOP，首先我创建一个配置类，开启aspectj的自动代理支持
 
 ```java
 @Configuration
@@ -107,19 +107,19 @@ public class TestAspect {
 }
 ```
 
-​	执行测试方法之后，可以看到控制台上在打印query方法中的query...之前，打印了before------------
+​	执行测试方法之后，可以看到控制台上在打印 query 方法中的query...之前，打印了before------------
 
 [![BD5o34.png](https://s1.ax1x.com/2020/11/02/BD5o34.png)](https://imgchr.com/i/BD5o34)
 
-​	大家看到，在调用query方法之前，先调用了前置通知方法beforeAd，说明执行了AOP的操作，Spring是通过动态代理和字节码技术来实现AOP操作的，接下来，我们就来深入源码，探究Spring AOP的实现原理。
+​	大家看到，在调用 query 方法之前，先调用了前置通知方法 beforeAd ，说明执行了 AOP 的操作，Spring 是通过动态代理和字节码技术来实现 AOP 操作的，接下来，我们就来深入源码，探究 Spring AOP 的实现原理。
 
 ## 四、Spring AOP源码分析
 
-​	进入debug，可以看到通过getBean的调用后返回的是经过JDK动态代理的对象JdkDynamicAopProxy，也就是说在getBean的过程中，我们的dao对象已经被代理了。
+​	进入debug，可以看到通过 `getBean` 的调用后返回的是经过 JDK 动态代理的对象 JdkDynamicAopProxy，也就是说在 `getBean` 的过程中，我们的 dao 对象已经被代理了。
 
 [![BD7DZn.jpg](https://s1.ax1x.com/2020/11/02/BD7DZn.jpg)](https://imgchr.com/i/BD7DZn)
 
-​	配置的AOP的类在IOC阶段就已经生成了一个代理类，那么这个代理类是什么时候产生的呢，先进入AbstractApplicationContext的getBean方法
+​	配置的 AOP 的类在 IOC 阶段就已经生成了一个代理类，那么这个代理类是什么时候产生的呢，先进入 AbstractApplicationContext 的 `getBean` 方法
 
 ```java
 	@Override
@@ -224,7 +224,7 @@ public class TestAspect {
 	}
 ```
 
-​	接下来我们就进入doGetBean方法来看看
+​	接下来我们就进入 `doGetBean` 方法来看看
 
 ```java
 	final String beanName = transformedBeanName(name);
@@ -232,12 +232,12 @@ public class TestAspect {
 
 		// Eagerly check singleton cache for manually registered singletons.
 		/**
-		 * 这个方法在初始化的时候会调用，在getBean的时候也会调用
+		 * 这个方法在初始化的时候会调用，在 getBean 的时候也会调用
 		 * 为什么需要这么做呢？
 		 * 也就是说spring在初始化的时候先获取这个对象
 		 * 判断这个对象是否被实例化好了
-		 * 从spring的bean容器中获取一个bean，由于spring中bean容器是一个map（singletonObjects）
-		 * 所以你可以理解getSingleton(beanName)等于beanMap.get(beanName)
+		 * 从spring的bean容器中获取一个bean，由于spring中bean容器是一个map(singletonObjects)
+		 * 所以你可以理解 getSingleton(beanName) 等于 beanMap.get(beanName)
 		 * 需要说明的是在初始化时候调用一般都是返回null
 		 */
 		// 先从缓存中获取，因为在容器初始化的时候或者其他地方调用过getBean，已经完成了初始化
@@ -256,7 +256,7 @@ public class TestAspect {
 		}
 ```
 
-​	此时我用上了条件断点，限定beanName为indexDao时才进入getSingleton方法，我们来看这个方法
+​	此时我用上了条件断点，限定 beanName 为 indexDao 时才进入 `getSingleton` 方法，我们来看这个方法
 
 ```java
 	@Nullable
@@ -280,7 +280,7 @@ public class TestAspect {
 	}
 ```
 
-​	可是我们在这只看到了singletonObjects.get方法，那么singletonObject里的bean是什么时候被设置进去的呢，找一下我们就知道，是在addSingleton这个方法的时候被设置进去的，这个方法在DefaultSingletonBeanRegistry注册器中
+​	可是我们在这只看到了 `singletonObjects.get` 方法，那么 `singletonObject` 里的 `bean` 是什么时候被设置进去的呢，找一下我们就知道，是在 `addSingleton` 这个方法的时候被设置进去的，这个方法在 DefaultSingletonBeanRegistry 注册器中
 
 ```java
 protected void addSingleton(String beanName, Object singletonObject) {
@@ -293,7 +293,7 @@ protected void addSingleton(String beanName, Object singletonObject) {
 }
 ```
 
-​	我将条件断点打在singletonObjects.put方法上，当条件断点走进来时，查看此时的方法调用栈，发现其实在addSingleton方法执行之前，代理类就已经被创建出来了
+​	我将条件断点打在 `singletonObjects.put` 方法上，当条件断点走进来时，查看此时的方法调用栈，发现其实在 `addSingleton` 方法执行之前，代理类就已经被创建出来了
 
 [![BrrUVH.png](https://s1.ax1x.com/2020/11/02/BrrUVH.png)](https://imgchr.com/i/BrrUVH)
 
@@ -400,7 +400,7 @@ catch (Throwable ex) {
 }
 ```
 
-​	同样的，我只截取重要的部分放在这里，我们看到这里出现了applyBeanPostProcessorsBeforeInitialization和applyBeanPostProcessorsAfterInitialization两个方法，在spring bean的生命周期中分别起到了预初始化和初始化后方法的作用
+​	同样的，我只截取重要的部分放在这里，我们看到这里出现了 `applyBeanPostProcessorsBeforeInitialization` 和 `applyBeanPostProcessorsAfterInitialization` 两个方法，在 spring bean 的生命周期中分别起到了预初始化和初始化后方法的作用
 
 ```java
 Object wrappedBean = bean;
@@ -421,11 +421,11 @@ if (mbd == null || !mbd.isSynthetic()) {
 }
 ```
 
-​	现在我们把断点打在这里，执行完applyBeanPostProcessorsBeforeInitialization方法之后，我们看到此时还未产生代理类
+​	现在我们把断点打在这里，执行完 `applyBeanPostProcessorsBeforeInitialization` 方法之后，我们看到此时还未产生代理类
 
 [![BrvawD.png](https://s1.ax1x.com/2020/11/03/BrvawD.png)](https://imgchr.com/i/BrvawD)
 
-​	此时我们就知道，代理类一定是在applyBeanPostProcessorsAfterInitialization方法中产生的
+​	此时我们就知道，代理类一定是在 `applyBeanPostProcessorsAfterInitialization` 方法中产生的
 
 ```java
 @Override
@@ -447,7 +447,7 @@ public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, St
 
 [![BrvDfA.png](https://s1.ax1x.com/2020/11/03/BrvDfA.png)](https://imgchr.com/i/BrvDfA)
 
-​	我们看到第四个处理器，就是aspectj自动代理创建器，此时真相大白了，Spring AOP的动态代理类就是从这个创建器中创建出来的，我们断点进到这个processor的postProcessAfterInitialization方法
+​	我们看到第四个处理器，就是 aspectj 自动代理创建器，此时真相大白了，Spring AOP 的动态代理类就是从这个创建器中创建出来的，我们断点进到这个 processor 的 `postProcessAfterInitialization` 方法
 
 ```java
 @Override
@@ -530,7 +530,7 @@ protected Object createProxy(Class<?> beanClass, @Nullable String beanName,
          //创建aop工厂
 		return getAopProxyFactory().createAopProxy(this);
 	}
-	//该方法主要逻辑是创建一个AOP 工厂，默认工厂是 DefaultAopProxyFactory，该类的 createAopProxy 方法则根据 ProxyFactoryBean 的一些属性来决定创建哪种代理
+	//该方法主要逻辑是创建一个AOP工厂，默认工厂是DefaultAopProxyFactory，该类的createAopProxy方法则根据ProxyFactoryBean的一些属性来决定创建哪种代理
 	@Override
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
          //由于默认的proxyTargetClass属性为false，代码转到else中，所以Spring AOP默认是使用java的动态代理来创建的代理类
@@ -553,7 +553,7 @@ protected Object createProxy(Class<?> beanClass, @Nullable String beanName,
 	}
 ```
 
-​	在CreateProxy方法返回一个JDK的代理之后，调用了getProxy方法获得一个代理类，我们来看看JdkDynamicAopProxy的实现
+​	在 `CreateProxy` 方法返回一个 JDK 的代理之后，调用了 `getProxy` 方法获得一个代理类，我们来看看 JdkDynamicAopProxy 的实现
 
 ```java
 @Override
@@ -567,7 +567,7 @@ public Object getProxy(@Nullable ClassLoader classLoader) {
 }
 ```
 
-​	当返回了一个代理类之后，接下来代理类调用到具体方法的时候，实际调用的就是JdkDynamicAopProxy类中的invoke方法
+​	当返回了一个代理类之后，接下来代理类调用到具体方法的时候，实际调用的就是 JdkDynamicAopProxy 类中的 `invoke` 方法
 
 ```java
 @Override
@@ -669,7 +669,7 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 
 ​	接下来我们来看在上面的步骤中需要关注的几个方法
 
-- org.springframework.aop.framework.AdvisedSupport#getInterceptorsAndDynamicInterceptionAdvice
+- `org.springframework.aop.framework.AdvisedSupport#getInterceptorsAndDynamicInterceptionAdvice`
 
 ```java
 public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, @Nullable Class<?> targetClass) {
@@ -688,7 +688,7 @@ public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, @
 }
 ```
 
-- org.springframework.aop.framework.DefaultAdvisorChainFactory#getInterceptorsAndDynamicInterceptionAdvice
+- `org.springframework.aop.framework.DefaultAdvisorChainFactory#getInterceptorsAndDynamicInterceptionAdvice`
 
 ```java
 @Override
@@ -753,7 +753,7 @@ public List<Object> getInterceptorsAndDynamicInterceptionAdvice(
 }
 ```
 
-- org.springframework.aop.framework.ReflectiveMethodInvocation#proceed
+- `org.springframework.aop.framework.ReflectiveMethodInvocation#proceed`
 
 ```java
 @Override
@@ -791,11 +791,11 @@ public Object proceed() throws Throwable {
 }
 ```
 
-​	综上就是Spring AOP的详细执行流程了，最后我在此给出一张Spring AOP的执行时序图
+​	综上就是 Spring AOP 的详细执行流程了，最后我在此给出一张 Spring AOP 的执行时序图
 
 [![Bs0wfx.png](https://s1.ax1x.com/2020/11/03/Bs0wfx.png)](https://imgchr.com/i/Bs0wfx)
 
 ## 五、结语
 
-​	本文，我从什么是AOP开始，分别介绍了AOP的相关概念，Spring AOP的使用，接着对Spring的源码进行了分析，看到了Spring AOP创建动态代理类的过程和执行AOP切面代码逻辑的过程，至此，本文也就结束了，如有错误和不足，还请大家多多指正，感谢大家的支持。
+​	本文，我从什么是 AOP 开始，分别介绍了AOP的相关概念，Spring AOP 的使用，接着对 Spring 的源码进行了分析，看到了 Spring AOP 创建动态代理类的过程和执行 AOP 切面代码逻辑的过程，至此，本文也就结束了，如有错误和不足，还请大家多多指正，感谢大家的支持。
 
