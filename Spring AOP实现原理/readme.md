@@ -1,5 +1,9 @@
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/sj0lh.jpg)
+
 # 一文读懂 Spring AOP 实现原理
 
+- 作者：[王韡](https://github.com/jimmywang1994)
+- 编辑：[东泽](https://github.com/netpi)
 
 > 说起大名鼎鼎的 Spring 框架，大家都知道 Spring 有两大核心概念，一个是 Spring IOC，另一个就是 Spring
 > AOP，本文目的在于让大家了解到 Spring AOP 的实现原理，我会通过源码的分析来让大家看到 Spring 是怎么实现的 AOP。
@@ -17,8 +21,7 @@
 - Target（目标对象）：织入 Advice 的目标对象
 - Weaving（织入）：将 Aspect 和其他对象连接起来, 并创建 Adviced object 的过程
 
-[![BDhsIS.png](https://s1.ax1x.com/2020/11/02/BDhsIS.png)](https://imgchr.com/i/BDhsIS)
-
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/sfl1z.jpg)
 ## 三、Spring AOP的使用
 
 ​	了解了 AOP 的相关概念之后，现在我们开始使用 Spring 的 AOP，话不多说，直接上代码。首先创建一个 maven 工程，引入 Spring-context 依赖，版本为5.1.1RELEASE
@@ -793,8 +796,7 @@ public Object proceed() throws Throwable {
 
 ​	综上就是 Spring AOP 的详细执行流程了，最后我在此给出一张 Spring AOP 的执行时序图
 
-[![Bs0wfx.png](https://s1.ax1x.com/2020/11/03/Bs0wfx.png)](https://imgchr.com/i/Bs0wfx)
-
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/zhra8.jpg)
 ## 五、结语
 
 ​	本文，我从什么是 AOP 开始，分别介绍了AOP的相关概念，Spring AOP 的使用，接着对 Spring 的源码进行了分析，看到了 Spring AOP 创建动态代理类的过程和执行 AOP 切面代码逻辑的过程，至此，本文也就结束了，如有错误和不足，还请大家多多指正，感谢大家的支持。
