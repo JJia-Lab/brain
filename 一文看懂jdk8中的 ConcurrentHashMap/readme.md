@@ -124,7 +124,7 @@
 
 ## ConcurrentHashMap实现原理
 
-ConcurrentHashMap 在j dk7 升级j到 dk8之 后有较大的改动，jdk7 中主要采用 `Segment` 分段锁的思想，`Segment` 继承自`ReentrantLock` 类，依次来保证线程安全。限于篇幅原因，本文只讨论 jdk8 中的 ConcurrentHashMap 实现原理。有兴趣的同学可以自行研究 jdk7 中的实现。
+ConcurrentHashMap 在 jdk7 升级j到 dk8之 后有较大的改动，jdk7 中主要采用 `Segment` 分段锁的思想，`Segment` 继承自`ReentrantLock` 类，依次来保证线程安全。限于篇幅原因，本文只讨论 jdk8 中的 ConcurrentHashMap 实现原理。有兴趣的同学可以自行研究 jdk7 中的实现。
 
 jdk8 中的 ConcurrentHashMap 数据结构同 jdk8 中的 HashMap 数据结构一样，都是 **数组+链表+红黑树**。摒弃了 jdk7 中的分段锁设计，使用了 `Node` + `CAS` + `Synchronized` 来保证线程安全。
 
@@ -172,7 +172,7 @@ static class Node<K,V> implements Map.Entry<K,V> {
 ```markdown
 Unsafe 是 jdk 提供的一个直接访问操作系统资源的工具类（底层c++实现），它可以直接分配内存，内存复制，copy，提供 cpu 级别的 CAS 乐观锁等操作。它的目的是为了增强java语言直接操作底层资源的能力。使用Unsafe类最主要的原因是避免使用高速缓冲区中的过期数据。
 
-为了方便理解，举个栗子。类User有一个成员变量 name。我们new了一个对象User后，就知道了它在内存中的 起始值 ,而成员变量 name 在对象中的位置偏移是固定的。这样通过这个起始值和这个偏移量就能够定位到 name 在内存中的具体位置。
+为了方便理解，举个栗子。类 User 有一个成员变量 name。我们new了一个对象 User 后，就知道了它在内存中的起始值 ,而成员变量 name 在对象中的位置偏移是固定的。这样通过这个起始值和这个偏移量就能够定位到 name 在内存中的具体位置。
 Unsafe 提供了相应的方法获取静态成员变量，成员变量偏移量的方法，所以我们可以使用 Unsafe 直接更新内存中 name 的值。
 ```
 
@@ -192,7 +192,7 @@ CAS 译为 Compare And Swap，它是乐观锁的一种实现。假设内存值�
 
 
 
-#### size
+#### size 方法
 
 `size` 方法用于统计 map 中的元素个数，通过源码我们发现 `size` 核心是  `sumCount`  方法，其中变量 baseCount  的值是记录完成元素插入并且成功更新到 baseCount  上的元素个数，CounterCell 数组是记录完成元素插入但是在 CAS 修改 baseCount 失败时的元素个数，因此 baseCount + CounterCell 数组记录的总数是 map 中的元素个数。
 
@@ -227,7 +227,7 @@ final long sumCount() {
 
 -----
 
-#### put
+#### put 方法
 
 `put` 方法是向map中存入元素，本质上调用了 `putVal`，该方法非常核心的方法之一，读者可结合笔者添加的注释加以理解
 
@@ -453,7 +453,7 @@ final long sumCount() {
 
 ----
 
-#### get
+#### get 方法
 
 `get` 方法逻辑比较简单清晰
 
@@ -486,7 +486,7 @@ public V get(Object key) {
 
 ------
 
-#### helpTransfer  和 transfer 
+#### helpTransfer  和 transfer 方法
 
 `helpTransfer`  方法在判断完扩容状态后，本质上还是调用了 `transfer`
 
