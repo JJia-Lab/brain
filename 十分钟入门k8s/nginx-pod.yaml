@@ -1,19 +1,16 @@
 apiVersion: v1
-kind: ReplicationController
+kind: Pod
 metadata:
-  name: nginx-controller
+name: test-nginx
+namespace: shujubu
+labels:
+name: test-nginx
 spec:
-  replicas: 2
-  selector:
-    name: nginx
-  template:
-    metadata:
-      labels:
-        name: nginx
-    spec:
-      containers:
-        - name: nginx
-          image: nginx:1.19
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 80
+containers:
+
+- name: nginx
+  image: nginx:1.19
+  imagePullPolicy: IfNotPresent
+  ports:
+- containerPort: 80
+  restartPolicy: Always
