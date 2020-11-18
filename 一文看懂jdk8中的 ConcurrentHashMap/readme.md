@@ -1,10 +1,12 @@
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/3jc8i.jpg)
 # 一文看懂jdk8中的 ConcurrentHashMap
 
 > 相信大家在日常开发中都用过 HashMap，HashMap 在并发扩容过程中，在 jdk7 中的实现可能会形成环形链表从而引发死循环，在jdk8中的实现又可能造成数据覆盖的问题。因此不论是 jdk7 还是 jdk8，HashMap 都是线程不安全的，为了解决线程安全问题，对Java 发展影响深远的 **Doug Lea** 编写了 ConcurrentHashMap 供开发者使用。
 >
 > 本文就 ConcurrentHashMap 的实现原理做初步探讨。
 
-
+- 作者：[陶旺旺](https://github.com/Aurora-Borealis1)
+- 编辑：[东泽](https://github.com/netpi)
 
 ## HashMap存在的问题
 
@@ -54,7 +56,7 @@
 
   如图所示，该map在插入第四个元素时会触发扩容
 
-  ![ByXdBT.md.png](https://s1.ax1x.com/2020/11/03/ByXdBT.md.png)
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/8sh9c.jpg)
 
   
 
@@ -62,15 +64,15 @@
 
   假设有两个线程同时执行到 `transfer` 方法，线程2执行到 `Entry<K,V> next = e.next; `之后cpu时间片耗尽，此时变量e指向节点a，变量next指向节点b。线程1完成了扩容，变量引用关系如图所示：
 
-  ![ByLvsf.md.png](https://s1.ax1x.com/2020/11/03/ByLvsf.md.png)
+  ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/cm64k.jpg)
 
   线程2开始执行，此时对于线程2中保存的变量引用关系如图所示：
-
-  ![ByLjQP.md.png](https://s1.ax1x.com/2020/11/03/ByLjQP.md.png)
+  ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/weugt.jpg)  
+  
 
   执行后，变量e指向节点b，因为e不是null，则继续执行循环体，执行后的引用关系。
-
-  ![ByLOzt.md.png](https://s1.ax1x.com/2020/11/03/ByLOzt.md.png)
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/b98rz.jpg)
+  
 
   变量e又重新指回节点a，只能继续执行循环体，这里仔细分析下：
    1、执行完`Entry<K,V> next = e.next;`，目前节点a没有next，所以变量next指向null；
@@ -80,7 +82,7 @@
 
   所以最终的引用关系是这样的：
 
-![ByLLRI.md.png](https://s1.ax1x.com/2020/11/03/ByLLRI.md.png)
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/mmvqr.jpg)
 
 ​		节点a和b互相引用，形成了一个环，当在数组该位置get寻找对应的key时，就发生了死循环。
 
