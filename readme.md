@@ -19,6 +19,9 @@
 
 * [「10分钟入门 k8s」](./十分钟入门k8s) - *[@刘大伟](https://github.com/liulang491)*
 * [「一文读懂Spring AOP实现原理」](./Spring%20AOP实现原理) - *[@王韡](https://github.com/jimmywang1994)*
+* [「一文看懂jdk8中的 ConcurrentHashMap」](./一文看懂jdk8中的%20ConcurrentHashMap) - *[@陶旺旺](https://github.com/Aurora-Borealis1)*
+* [「揭秘nacos-config客户端工作原理」](./揭秘nacos-config客户端工作原理) - *[@王韡](https://github.com/jimmywang1994)*
+
 
 ## Social
 * [掘金](https://juejin.im/user/1512541194828205)
