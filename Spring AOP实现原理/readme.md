@@ -21,6 +21,7 @@
 - Target（目标对象）：织入 Advice 的目标对象
 - Weaving（织入）：将 Aspect 和其他对象连接起来, 并创建 Adviced object 的过程
 
+
 ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/sfl1z.jpg)
 ## 三、Spring AOP的使用
 
@@ -795,6 +796,7 @@ public Object proceed() throws Throwable {
 ```
 
 ​	综上就是 Spring AOP 的详细执行流程了，最后我在此给出一张 Spring AOP 的执行时序图
+
 
 ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/zhra8.jpg)
 ## 五、结语
