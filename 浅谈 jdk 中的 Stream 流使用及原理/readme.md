@@ -195,9 +195,7 @@ abstract class AbstractPipeline<E_IN, E_OUT, S extends BaseStream<E_OUT, S>>
 }
 ```
 
-
-
-## 2. 生成 filter 对应的操作对象
+### 2. 生成 filter 对应的操作对象
 
 第二步是 `filter` 方法，最终调用如下，创建了一个无状态的操作对象 **StatelessOp**，创建对象时会将 Head (this) 对象传入，构建双向链表关系，同时也会记录 sourceStage (Head) 。至此，上图的指向关系已经明了。
 
@@ -294,9 +292,7 @@ interface Sink<T> extends Consumer<T> {
 }
 ```
 
-
-
-## 3. 生成 sorted 对应的对象
+### 3. 生成 sorted 对应的对象
 
 第三步的 `sorted` 方法，`sorted` 返回的是 OfRef 类的一个实例，类似 `filter` ，同样也实现了 `opWrapSink` 方法，不过因为 `sorted` 方法实现的是排序功能，所以这里会确定比较器 comparator，最后由比较器实现排序逻辑。
 
@@ -374,9 +370,7 @@ private static final class OfRef<T> extends ReferencePipeline.StatefulOp<T, T> {
 
 ```
 
-
-
-## 4. 拨动齿轮
+### 4. 拨动齿轮
 
 至此为止，我们已经构建好了双向链表的操作，每个操作都被保存到一个个 **StatelessOp** 或者 **StatefulOp** 对象中，但在之前的操作中，我们封装好的 Sink 对象并没有实际调用，这也是为什么 Stream 流如果不进行终结操作之前的中间操作都不会触发的原因，万事俱备，只欠东风。东风就是终结操作，点开本例中的 forEach 方法。
 
