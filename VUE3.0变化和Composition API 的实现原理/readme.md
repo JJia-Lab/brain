@@ -2,7 +2,7 @@
 
 # 前言
 
-距离2020 年 9 月 18 日发布vue3.0正式版本已经3个多月了，作为技术人员，随时保持技术同步是很重要的事情。本文就让作者来带领大家看一看3.0对比2.x到底有哪些改变。
+距离2020 年 9 月 18 日发布 vue3.0 正式版本已经3个多月了，作为技术人员，随时保持技术同步是很重要的事情。本文就让作者来带领大家看一看3.0对比2.x到底有哪些改变。
 
 
 # 一、建立项目
@@ -18,8 +18,8 @@ vue create hello-vue3
 # select vue 3 preset
 ```
 
-作者是使用yarn create vite-app hello-vue3建立脚手架。
-使用yarn 命令安装依赖后，输入yarn dev 就可以运行起项目。
+作者是使用 yarn create vite-app hello-vue3 建立脚手架。
+使用 yarn 命令安装依赖后，输入 yarn dev 就可以运行起项目。
 
 项目显示如下图所示
 
@@ -138,11 +138,13 @@ VUE3.0还有一些其他的改变，例如
 
 # 三、新特性 Composition API
 
-   * 在 Vue.js 1.x 和 2.x 版本中，编写组件本质就是在编写一个“包含了描述组件选项的对象”，我们把它称为 Options API
-   * Options API 的设计是按照 methods、computed、data、props 这些不同的选项分类，当组件小的时候，这种分类方式一目了然；但是在大型组件中，一个组件可能有多个逻辑关注点，当使用 Options API 的时候，每一个关注点都有自己的 Options，如果需要修改一个逻辑点关注点，就需要在单个文件中不断上下切换和寻找。
-   * Vue.js 3.0 提供了一种新的 API：Composition API，它提供了一个 setup 启动函数作为逻辑组织的入口，暴露了响应式 API 为用户所用，也提供了生命周期函数以及依赖注入的接口，就是将某个逻辑关注点相关的代码全都放在一个函数里，这样当需要修改一个功能时，就不再需要在文件中跳来跳去。
-![对比图](images/2.png)
-<font color=#999AAA >Composition API 属于 API 的增强，它并不是 Vue.js 3.0 组件开发的范式，如果你的组件足够简单，你还是可以使用 Options API。</font>
+   * 在 Vue3 之前的版本，编写组件就是在编写一个“包含了描述组件选项的对象”，这种形式称为 Options API
+   * Options API 是按照 methods、computed、data、props 这些不同的选项进行分类，当组件小的时候，这种分类方式一目了然；但是在大型组件中，一个组件有多个功能点，当使用 Options API 的时候，每一个功能点都有自己的 Options，如果需要修改一个功能点，就需要在单个文件中不断上下切换和寻找对应的功能点进行相应的优化。</br>
+    <font color=#999AAA >如下图所示,该页面使用了elementUI的分页功能,需要在data和methods编写对应的翻页逻辑,中间隔着 components 和 created,如果要优化分页逻辑需要下切换和寻找。</font>
+    ![对比图](images/4.png) </br>
+   * Vue3 提供了新特性 Composition API，它以 setup 启动函数作为逻辑组织的入口，暴露了响应式 API 为用户所用，也提供了生命周期函数以及依赖注入的接口，就是将某个逻辑关注点相关的代码全都放在一个函数里，这样当需要修改一个功能时，就不再需要在文件中跳来跳去。</br>
+  ![对比图](images/2.png) </br>
+  <font color=#999AAA >Composition API 属于 API 的增强，它并不是 Vue.js 3.0 组件开发的范式，如果你的组件足够简单，你还是可以使用 Options API。</font>
 
 通过以下代码了解一下Composition API
 ```javascript
@@ -170,9 +172,9 @@ export default {
 }
 </script>
 ```
-可以看到，这段代码和 Vue.js 2.x 组件的写法相比，多了一个 setup 启动函数，另外组件中也没有定义 props、data、computed 这些 options。
+通过这段代码可以看到和 Vue.js 2.x 组件的写法相比，多了一个 setup 启动函数，另外组件中也没有定义 props、data、computed 这些 options。
 
-在 setup 函数内部，定义了一个响应式对象 state，它是通过 reactive API 创建的。state 对象有 count 和 double 两个属性，其中 count 对应一个数字属性的值；而double 通过 computed API 创建，对应一个计算属性的值。
+在setup 函数中，通过 reactive API 创建的一个响应式对象 state 。state 对象有 count 和 double 两个属性，其中 count 对应了一个数字属性的值；而double 则通过 computed API 创建一个计算属性的值。另外也定义了increment方法.最后将state对象和increment方法对外暴露,在template就可以使用到暴露的内容.
 
 # 四、Composition API 的实现原理
 下图是VUE3源码中执行到setupComponent方法的执行链路
@@ -199,8 +201,8 @@ setup 启动函数的主要逻辑是在渲染 vnode 的过程中
 
   // 设置组件实例
   setupComponent(instance)
-    // 设置并运行渲染函数
-    setupRenderEffect(
+  // 设置并运行渲染函数
+  setupRenderEffect(
       instance,
       initialVNode,
       container,
@@ -211,7 +213,7 @@ setup 启动函数的主要逻辑是在渲染 vnode 的过程中
     )
   }
 ```
-创建组件实例的流程，我们要关注 createComponentInstance 方法的实现
+创建组件实例的流程，我们要要关注 createComponentInstance 方法的实现
 ```javascript
 export function createComponentInstance(
   vnode: VNode,
@@ -517,6 +519,10 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
 }
 ```
 这里要注意顺序问题，优先判断 setupState，然后是 data，接着是 props。</br>
+
+
+
+
 通过源码我们分析了组件的初始化流程，包括了创建组件实例和设置组件实例。通过进一步深入细节，我们也了解了渲染上下文的代理过程。了解了 Composition API 中的 setup 启动函数执行的时机，以及如何建立 setup 返回结果和模板渲染之间的联系。
 
 
