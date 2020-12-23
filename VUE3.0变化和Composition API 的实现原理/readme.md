@@ -23,8 +23,7 @@ vue create hello-vue3
 
 项目显示如下图所示
 
-![vue项目图](images/1.png)
-
+[![vue项目图](https://s3.ax1x.com/2020/12/23/r6dVaD.md.png)](https://imgchr.com/i/r6dVaD)
 
 
 # 二、非兼容的变更
@@ -141,9 +140,9 @@ VUE3.0还有一些其他的改变，例如
    * 在 Vue3 之前的版本，编写组件就是在编写一个“包含了描述组件选项的对象”，这种形式称为 Options API
    * Options API 是按照 methods、computed、data、props 这些不同的选项进行分类，当组件小的时候，这种分类方式一目了然；但是在大型组件中，一个组件有多个功能点，当使用 Options API 的时候，每一个功能点都有自己的 Options，如果需要修改一个功能点，就需要在单个文件中不断上下切换和寻找对应的功能点进行相应的优化。</br>
     <font color=#999AAA >如下图所示,该页面使用了 elementUI 的分页功能,需要在data和methods编写对应的翻页逻辑,中间隔着 components 和 created,如果要优化分页逻辑需要上下切换和寻找。</font>
-    ![对比图](images/4.png) </br>
+    [![代码效果图](https://s3.ax1x.com/2020/12/23/r6dXQI.png)](https://imgchr.com/i/r6dXQI) </br>
    * Vue3 提供了新特性 Composition API，它以 setup 启动函数作为逻辑组织的入口，暴露了响应式 API 为用户所用，也提供了生命周期函数以及依赖注入的接口，就是将某个逻辑关注点相关的代码全都放在一个函数里，这样当需要修改一个功能时，就不再需要在文件中跳来跳去。</br>
-  ![对比图](images/2.png) </br>
+    [![对比图](https://s3.ax1x.com/2020/12/23/r6dfQ1.md.png)](https://imgchr.com/i/r6dfQ1) </br>
   <font color=#999AAA >Composition API 属于 API 的增强，它并不是 Vue.js 3.0 组件开发的范式，如果你的组件足够简单，你还是可以使用 Options API。</font>
 
 通过以下代码了解一下 Composition API
@@ -179,7 +178,7 @@ export default {
 # 四、Composition API 的实现原理
 下图是 VUE3 源码中执行到 setupComponent 方法的执行链路
 
-![执行链路](images/3.png)
+[![执行链路](https://s3.ax1x.com/2020/12/23/r6wSw8.md.png)](https://imgchr.com/i/r6wSw8)
 
 setup 启动函数的主要逻辑是在渲染 vnode 的过程中
 ```javascript
@@ -615,7 +614,7 @@ function finishComponentSetup(
 ```
 
 <font color=#999AAA >源码中实现 Composition API 链路图</font>
-![实现链路图](images/5.png)
+[![实现链路图](https://s3.ax1x.com/2020/12/23/r6wkSs.png)](https://imgchr.com/i/r6wkSs)
 
 通过分析 VUE3 源码我们了解了组件的初始化流程、创建组件实例、设置组件实例。通过进一步的深入，我们对渲染上下文的代理过程也进行了介绍。了解了 Composition API 中的 setup 启动函数执行的时机，以及如何建立 setup 返回结果和模板渲染之间的联系。
 
