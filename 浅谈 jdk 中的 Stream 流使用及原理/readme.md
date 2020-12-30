@@ -2,8 +2,12 @@
 ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/gx81a.jpg)
 # 浅谈 jdk 中的 Stream 流使用及原理
 
-​		jdk7 升级到 jdk8 后新增了一项非常实用的功能，Stream 流，在实际开发中有着大量的运用。相信不少同学也对 Stream 流非常熟悉，那为什么 Stream 流如此受欢迎，它的出现到底解决了哪些问题，我们一起来探讨一下。
 
+>	jdk7 升级到 jdk8 后新增了一项非常实用的功能，Stream 流，在实际开发中有着大量的运用。相信不少同学也对 Stream 流非常熟悉，那为什么 Stream 流如此受欢迎，它的出现到底解决了哪些问题，我们一起来探讨一下。
+
+
+- 作者：[陶旺旺](https://github.com/Aurora-Borealis1)
+- 编辑：[东泽](https://github.com/netpi)
 
 
 ## Stream 流为什么会出现
