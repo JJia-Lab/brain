@@ -1,9 +1,14 @@
+
+# 揭秘nacos-config客户端工作原理
+
+> 随着SpringCloud中的许多组件逐渐的不再维护，越来越多的人开始使用SpringCloud Alibaba框架。SpringCloud Alibaba有着很多的组件，比如：Sentinel，Nacos，Rockermq等等，其中，Nacos组件可以替代SpringCloud中的Eureka作为注册中心，同时也可以替代SpringCloud中的SpringCloudConfig作为分布式配置中心，本文就来初探nacos作为分布式配置中心时的工作原理。
+>
+
 ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/20l7d.jpg)
 
 - 作者：[王韡](https://github.com/jimmywang1994)
 - 编辑：[东泽](https://github.com/netpi)
 
-> 随着SpringCloud中的许多组件逐渐的不再维护，越来越多的人开始使用SpringCloud Alibaba框架。SpringCloud Alibaba有着很多的组件，比如：Sentinel，Nacos，Rockermq等等，其中，Nacos组件可以替代SpringCloud中的Eureka作为注册中心，同时也可以替代SpringCloud中的SpringCloudConfig作为分布式配置中心，本文就来初探nacos作为分布式配置中心时的工作原理。
 
 ## 一、什么是分布式配置中心
 
@@ -15,6 +20,9 @@
 
 **nacos基础架构**
 
+
+[![DaSfmt.jpg](https://s3.ax1x.com/2020/11/25/DaSfmt.jpg)](https://imgchr.com/i/DaSfmt)
+=======
 ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/r4q58.jpg)
 
 ## 三、配置环境、运行demo
@@ -556,6 +564,9 @@ public void handle(RefreshEvent event) {
 
 最后，总结一个nacos-config客户端简版框架流程图给大家
 
+
+[![DaA0it.png](https://s3.ax1x.com/2020/11/25/DaA0it.png)](https://imgchr.com/i/DaA0it)
+=======
 ![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/7ine1.jpg)
 
 ## 五、总结
