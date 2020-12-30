@@ -1,7 +1,5 @@
 
-
-[toc]
-
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/gx81a.jpg)
 # 浅谈 jdk 中的 Stream 流使用及原理
 
 ​		jdk7 升级到 jdk8 后新增了一项非常实用的功能，Stream 流，在实际开发中有着大量的运用。相信不少同学也对 Stream 流非常熟悉，那为什么 Stream 流如此受欢迎，它的出现到底解决了哪些问题，我们一起来探讨一下。
@@ -99,7 +97,7 @@ Stream 流提供了丰富的操作类型，如下图所示
 
 首先看一下类的继承关系图：
 
-[![rQvJHS.png](https://s3.ax1x.com/2020/12/16/rQvJHS.png)](https://imgchr.com/i/rQvJHS)
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/qtpyr.jpg)
 
 
 
@@ -145,7 +143,7 @@ abstract class AbstractPipeline<E_IN, E_OUT, S extends BaseStream<E_OUT, S>>
 
 源码中，以 Stage 来描述每个阶段，而且是典型的双向链表结构。因此 Stream 流过程可以用下图描述
 
-[![rlYCe1.png](https://s3.ax1x.com/2020/12/16/rlYCe1.png)](https://imgchr.com/i/rlYCe1)
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/cxq86.jpg)
 
 
 
@@ -511,7 +509,7 @@ public void forEachRemaining(Consumer<? super T> action) {
 
 类比实际生活，我们可以将 Stream 流比作水流，中间操作则是相当于水流过程中的蓄水池，Sink则是每个蓄水池的操作者，终结操作则是下达指令的指挥官。此例中的操作可如下图：
 
-[![rl8BFO.png](https://s3.ax1x.com/2020/12/16/rl8BFO.png)](https://imgchr.com/i/rl8BFO)
+![](https://chendongze.oss-cn-shanghai.aliyuncs.com/ipic/6x6q7.jpg)
 
 
 
@@ -523,9 +521,4 @@ public void forEachRemaining(Consumer<? super T> action) {
 
 ​		本文可能存在错误和不足，敬请指正。
 
-
-
-参考链接：
-
-<https://www.jianshu.com/p/dd5fb725331b>
 
